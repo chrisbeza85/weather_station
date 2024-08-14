@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Environment Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .data-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .data-item {
+            margin: 0 20px;
+            text-align: center;
+        }
+        .data-item img {
+            width: 50px;
+            height: 50px;
+        }
+        .timestamp {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Current Temperature and Humidity</h1>
+    <div class="data-container">
+        <div class="data-item">
+            <img src="https://img.icons8.com/ios-filled/50/000000/thermometer.png" alt="Temperature Icon">
+            <p>Temperature: <span id="temp-value">N/A</span> °C</p>
+        </div>
+        <div class="data-item">
+            <img src="https://img.icons8.com/ios-filled/50/000000/humidity.png" alt="Humidity Icon">
+            <p>Humidity: <span id="humidity-value">N/A</span> %</p>
+        </div>
+    </div>
+    <p id="datetime" class="timestamp">Date and Time: </p>
+
+    <script>
+        function fetchSensorData() {
+            fetch('/sensors/temperature/get/')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Data received:", data);
+
+                    const temperatures = [];
+                    const humidities = [];
+                    const timestamps = [];
+
+                    data.data.forEach(entry => {
+                        timestamps.push(entry.timestamp);
+                        temperatures.push(entry.temperature);
+                        humidities.push(entry.humidity);
+                    });
+
+                    document.getElementById('temp-value').innerText = temperatures[0] || 'N/A';
+                    document.getElementById('humidity-value').innerText = humidities[0] || 'N/A';
+
+                    // Update the date and time
+                    const now = new Date().toLocaleString();
+                    document.getElementById('datetime').innerText = `Date and Time: ${now}`;
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                });
+        }
+
+        // Fetch data every 5 seconds
+        setInterval(fetchSensorData, 5000);
+
+        // Initial fetch to populate data on page load
+        fetchSensorData();
+    </script>
+</body>
+</html>
