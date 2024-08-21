@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sensor Data</title>
+    <title>Weather Conditions</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Chart.js -->
@@ -9,16 +9,62 @@
     <!-- Date Adapter -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #0066cc, #ff6666);
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-weight: bold;
+            margin-bottom: 40px;
+            color: #f8f9fa;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        .card-title {
+            font-weight: bold;
+            color: #f8f9fa;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        .lead {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .fas {
+            color: #f8f9fa;
+            margin-bottom: 10px;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #f8f9fa;
+            box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="text-center">Sensor Data</h1>
+        <h1 class="text-center">Weather Conditions</h1>
 
         <div class="row">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Temperature</h5>
+                        <h5 class="card-title text-center">Temperature</h5>
                         <canvas id="temperatureChart"></canvas>
                         <div class="mt-3 text-center">
                             <i class="fas fa-thermometer-half fa-2x"></i>
@@ -30,7 +76,7 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Humidity</h5>
+                        <h5 class="card-title text-center">Humidity</h5>
                         <canvas id="humidityChart"></canvas>
                         <div class="mt-3 text-center">
                             <i class="fas fa-tint fa-2x"></i>
@@ -43,11 +89,15 @@
 
         <div class="card mt-4">
             <div class="card-body text-center">
-                <h5 class="card-title">Current Date & Time</h5>
+                <h5 class="card-title text-center">Current Date & Time</h5>
                 <p id="datetime" class="lead"></p>
             </div>
         </div>
     </div>
+
+    <footer>
+        <div>by Christopher Beza 2020063468</div>
+    </footer>
 
     <!-- jQuery and dependencies (Bootstrap JS) -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
