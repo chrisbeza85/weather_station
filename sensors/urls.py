@@ -8,4 +8,6 @@ urlpatterns = [
     path('sensors/temperature/get/', views.get_sensor_data, name='get_sensor_data'),  # For GET requests
     path('temperature/', views.record_data, name='record_data'),  # For POST requests, if separate
     path('display/', views.display_data, name='display_data'),
+    path('api/sensors/latest/', views.latest_data, name='latest_data'),
+    path('api/sensors/history/', views.history_data, name='history_data'),
 ]

@@ -10,11 +10,17 @@ import json
 from .models import SensorData
 from .serializers import SensorDataSerializer
 
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
+from django.utils.timezone import make_aware
+from datetime import datetime, timedelta
+
 @api_view(['GET'])
 def test_view(request):
     if request.method == 'GET':
         return Response({"message": "GET request successful"})
 
+@csrf_exempt
 @api_view(['POST', 'GET'])
 def record_data(request):
     if request.method == 'POST':
@@ -40,41 +46,6 @@ def display_data(request):
     data = SensorData.objects.all().order_by('-timestamp')
     return render(request, 'sensors/display_data.html', {'data': data})
 
-#@csrf_exempt
-#@require_http_methods(["GET", "POST"])
-#def temperature_data(request):
- #   if request.method == 'GET':
-  #      # Fetch the latest 10 sensor data entries
-   #     data = SensorData.objects.all().order_by('-timestamp')[:10]
-    #    response_data = [
-     #       {
-      #          "temperature": entry.temperature,
-       #         "humidity": entry.humidity,
-        #        "timestamp": entry.timestamp,
-         #   }
-         #   for entry in data
-        #]
-        #return JsonResponse({"data": response_data})
-
-    #elif request.method == 'POST':
-     #   try:
-      #      # Parse JSON data
-       #     data = json.loads(request.body)
-        #    temperature = data.get('temperature')
-         #   humidity = data.get('humidity')
-
-          #  if temperature is not None and humidity is not None:
-           #     SensorData.objects.create(temperature=temperature, humidity=humidity)
-            #    return JsonResponse({'status': 'success'}, status=201)
-            #else:
-             #   return JsonResponse({'error': 'Invalid data'}, status=400)
-        #except json.JSONDecodeError:
-         #   return JsonResponse({'error': 'Invalid JSON'}, status=400)
-
-# views.py
-
-
-
 def temperature_data(request):
     if request.method == 'GET':
         latest_data = SensorData.objects.order_by('-timestamp').first()
@@ -91,11 +62,7 @@ def temperature_data(request):
 def display_environment(request):
     return render(request, 'environment.html')
 
-
-from django.utils.dateparse import parse_datetime
-from django.utils.timezone import make_aware
-from datetime import datetime, timedelta
-
+@csrf_exempt
 def get_sensor_data(request):
     if request.method == 'GET':
         # Get the last 10 sensor data entries
@@ -114,9 +81,29 @@ def get_sensor_data(request):
         }
 
         return JsonResponse(data)
-    
+
+@csrf_exempt    
 def fetch_sensor_data(request):
     if request.method == 'GET':
         data = list(SensorData.objects.order_by('-timestamp').values('timestamp', 'temperature', 'humidity'))
         return JsonResponse({'data': data})
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+@csrf_exempt
+@api_view(['GET'])
+def latest_data(request):
+    latest_entry = SensorData.objects.latest('timestamp')
+    serializer = SensorDataSerializer(latest_entry)
+    return Response(serializer.data)
+
+@csrf_exempt
+@api_view(['GET'])
+def history_data(request):
+    period = request.query_params.get('period', 'last_3_minutes')
+    if period == 'last_3_minutes':
+        time_threshold = timezone.now() - timedelta(minutes=3)
+        data = SensorData.objects.filter(timestamp__gte=time_threshold).order_by('timestamp')
+    else:
+        data = SensorData.objects.all().order_by('timestamp')
+    serializer = SensorDataSerializer(data, many=True)
+    return Response(serializer.data)

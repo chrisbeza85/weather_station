@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'sensors',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -52,7 +53,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:59378',
+    'http://127.0.0.1:8000',
+    'http://127.0.0.1:59378',
+    'http://172.20.10.8:8000',
+    'http://172.16.60.112:8038',
+]
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'weather_station.urls'
 
