@@ -10,4 +10,5 @@ urlpatterns = [
     path('display/', views.display_data, name='display_data'),
     path('api/sensors/latest/', views.latest_data, name='latest_data'),
     path('api/sensors/history/', views.history_data, name='history_data'),
+    path('relay-control/', views.relay_control, name='relay_control'),
 ]
