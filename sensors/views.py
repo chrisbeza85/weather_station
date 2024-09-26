@@ -9,6 +9,7 @@ from .serializers import SensorDataSerializer
 from django.utils import timezone
 from datetime import timedelta
 import json
+import requests
 
 ESP32_URL = 'http://172.20.10.14:80/relay'
 
@@ -124,27 +125,32 @@ def relay_control(request):
             command = data.get('state')
 
             if command == 'on':
-                 # Send HTTP request to ESP32 to turn the relay ON
-                esp32_url = 'http://172.20.10.14/relay/on'
-                response = requests.get(esp32_url)
-                if response.status_code == 200:
-                    relay_state = 'on'
-                else:
-                    return JsonResponse({'error': 'Failed to communicate with ESP32'}, status=500)
+                esp32_url = 'http://172.20.10.14:80/relay/on'
             elif command == 'off':
-                # Send HTTP request to ESP32 to turn the relay OFF
-                esp32_url = 'http://172.20.10.14/relay/off'
-                response = requests.get(esp32_url)
-                if response.status_code == 200:
-                    relay_state = 'off'
-                else:
-                    return JsonResponse({'error': 'Failed to communicate with ESP32'}, status=500)
+                esp32_url = 'http://172.20.10.14:80/relay/off'
             else:
                 return JsonResponse({'error': 'Invalid command'}, status=400)
 
-            return JsonResponse({'state': relay_state})
+            response = requests.get(esp32_url)
+            if response.status_code == 200:
+                relay_state = command
+            else:
+                return JsonResponse({'error': 'Failed to communicate with ESP32'}, status=500)
+
+            return JsonResponse({'state': relay_state}, headers={
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type'
+            })
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
+
+    elif request.method == 'OPTIONS':
+        # CORS preflight handling
+        response = JsonResponse({'status': 'preflight'})
+        response['Access-Control-Allow-Origin'] = '*'
+        response['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
+        response['Access-Control-Allow-Headers'] = 'Content-Type'
+        return response
+
     return JsonResponse({'error': 'Invalid method'}, status=405)
-
-
