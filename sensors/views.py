@@ -11,7 +11,7 @@ from datetime import timedelta
 import json
 import requests
 
-ESP32_URL = 'http://172.20.10.14:80/relay'
+ESP32_URL = 'http://172.16.61.32:8077/relay'
 
 # A simple test view to check if the API is responding to GET requests
 @api_view(['GET'])
@@ -125,9 +125,9 @@ def relay_control(request):
             command = data.get('state')
 
             if command == 'on':
-                esp32_url = 'http://172.20.10.14:80/relay/on'
+                esp32_url = 'http://172.16.61.32:8077/relay/on'
             elif command == 'off':
-                esp32_url = 'http://172.20.10.14:80/relay/off'
+                esp32_url = 'http://172.16.61.32:8077/relay/off'
             else:
                 return JsonResponse({'error': 'Invalid command'}, status=400)
 
