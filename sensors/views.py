@@ -11,7 +11,7 @@ from datetime import timedelta
 import json
 import requests
 
-ESP32_URL = 'http://172.16.61.32:8077/relay'
+ESP32_URL = 'http://172.16.60.91:8077/relay'
 
 # A simple test view to check if the API is responding to GET requests
 @api_view(['GET'])
