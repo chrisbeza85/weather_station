@@ -94,16 +94,24 @@
 
         <div class="card mt-4">
             <div class="card-body text-center">
-                <h5 class="card-title text-center">Light Relay Control</h5>
-                <p id="relayStatus" class="lead">Light is OFF</p>
-                <button id="relayToggleButton" class="btn btn-primary">Turn ON</button>
-                <form id="relayForm"></form>
-                    <br>
-                    <label for="command">Enter Command (on/off):</label>
-                    <input type="text" id="command" name="command">
-                    <button type="button" id="relayButton">Submit</button>
-                    <p id="error" style="color: red; display: none;">Invalid command</p>
-                </form>
+                <h1>Light</h1>
+                <button onclick="sendRelayCommand('on')">Turn On</button>
+                <button onclick="sendRelayCommand('off')">Turn Off</button>
+
+                <script>
+                    function sendRelayCommand(state) {
+                        fetch('http://172.20.10.14/relay', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ state: state }),
+                        })
+                        .then(response => response.json())
+                        .then(data => console.log(data))
+                        .catch(error => console.error('Error:', error));
+                    }
+                </script>
             </div>
         </div>
 

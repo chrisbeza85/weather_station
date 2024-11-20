@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relay Control</title>
+</head>
+<body>
+    <h1>Control Relay</h1>
+    <button onclick="sendRelayCommand('on')">Turn On</button>
+    <button onclick="sendRelayCommand('off')">Turn Off</button>
+
+    <script>
+        function sendRelayCommand(state) {
+            fetch('http://172.16.60.91/relay', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ state: state }),
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

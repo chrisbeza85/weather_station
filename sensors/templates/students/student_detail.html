@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+            display: flex;
+            gap: 20px;
+        }
+        .student-info, .attendance-history {
+            width: 50%;
+        }
+        h1 {
+            color: #4A90E2;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .info {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .qr-code img {
+            max-width: 200px;
+            height: auto;
+            margin-top: 20px;
+        }
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4A90E2;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #357ABD;
+        }
+        .attendance-history {
+            max-height: 400px;
+            overflow-y: auto;
+            border-left: 1px solid #ddd;
+            padding-left: 20px;
+        }
+        .attendance-history h2 {
+            text-align: center;
+            color: #4A90E2;
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Student Info Section -->
+        <div class="student-info">
+            <h1>{{ student.first_name }} {{ student.middle_name }} {{ student.last_name }}</h1>
+            <div class="info">
+                <p><strong>Student Number:</strong> {{ student.student_number }}</p>
+                <p><strong>Email:</strong> {{ student.email }}</p>
+                <p><strong>Phone:</strong> {{ student.phone }}</p>
+                <p><strong>Gender:</strong> {{ student.get_gender_display }}</p>
+            </div>
+            <div class="qr-code">
+                <p><strong>QR Code:</strong></p>
+                <img src="{{ student.qr_code.url }}" alt="Student QR Code">
+            </div>
+            <a href="{% url 'student_list' %}" class="back-button">Back to List</a>
+        </div>
+
+        <!-- Attendance History Section -->
+        <div class="attendance-history">
+            <h2>Attendance History</h2>
+            <table>
+                <tr>
+                    <th>Date & Time Attended</th>
+                    <th>Date & Time Clocked Out</th>
+                </tr>
+                {% for record in attendance_history %}
+                <tr>
+                    <td>{{ record.date_time_attended }}</td>
+                    <td>
+                        {% if record.date_time_clocked_out %}
+                            {{ record.date_time_clocked_out }}
+                        {% else %}
+                            Not clocked out yet
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2">No attendance records available.</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

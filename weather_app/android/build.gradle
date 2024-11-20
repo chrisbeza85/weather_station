@@ -5,7 +5,7 @@ buildscript {
     }
     dependencies {
         // Ensure you use the correct version for your project
-        classpath 'com.android.tools.build:gradle:7.4.2' // or another compatible version
+        classpath 'com.android.tools.build:gradle:7.6' // or another compatible version
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0' // If you're using Kotlin
     }
 }

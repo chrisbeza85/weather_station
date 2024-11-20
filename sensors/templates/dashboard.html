@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labs Dashboard</title>
+    <style>
+        /* Import Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+        /* General Body Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Main Container Styling */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Heading Styling */
+        h1 {
+            text-align: center;
+            color: #4A90E2;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+
+        /* Dashboard Content Layout */
+        .dashboard-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        /* Card Style */
+        .card {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        /* Card Hover Effect */
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Card Heading */
+        .card h2 {
+            color: #4A90E2;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+        }
+
+        /* Links in the Cards */
+        .card a {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Link Hover Effects */
+        .card a:hover {
+            background-color: #4A90E2;
+            color: #f8f9fb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Labs Dashboard</h1>
+        <div class="dashboard-content">
+            <!-- Labs Card -->
+            <div class="card">
+                <h2>Labs</h2>
+                <a href="{% url 'item_list' %}">Inventory System</a>
+                <a href="{% url 'display_data' %}">Temperature & Humidity Control</a>
+                <a href="{% url 'student_list' %}">Class Attendance</a>
+            </div>
+
+            <!-- Latest Updates Card -->
+            <div class="card">
+                <h2>By Christopher Beza</h2>
+                <p>2020063468</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

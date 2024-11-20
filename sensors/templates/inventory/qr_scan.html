@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner</title>
+    <style>
+        /* Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .scanner-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        canvas {
+            display: none;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="scanner-container">
+        <h1>Scan QR Code</h1>
+        <video id="video" autoplay></video>
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <!-- Hidden form to submit the QR code -->
+    <form id="qrForm" method="POST" action="{% url 'scan_qr_code' %}">
+        {% csrf_token %}
+        <input type="hidden" id="qr_code" name="qr_code">
+    </form>
+
+    <footer>
+        Point your camera at a QR code to scan
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
+    <script>
+        const video = document.getElementById('video');
+        const canvasElement = document.getElementById('canvas');
+        const canvas = canvasElement.getContext('2d');
+
+        // Access the device camera and stream it to the video element
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+            video.srcObject = stream;
+        });
+
+        function tick() {
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                canvasElement.height = video.videoHeight;
+                canvasElement.width = video.videoWidth;
+                canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+                
+                const imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+                const qrCode = jsQR(imageData.data, imageData.width, imageData.height, {
+                    inversionAttempts: "dontInvert",
+                });
+                
+                if (qrCode) {
+                    // Set the value of the hidden input to the scanned QR code
+                    document.getElementById('qr_code').value = qrCode.data;
+
+                    // Submit the form to the Django view
+                    document.getElementById('qrForm').submit();
+                }
+            }
+            requestAnimationFrame(tick);
+        }
+
+        // Start scanning when the video stream is ready
+        video.addEventListener('play', () => {
+            tick();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #4A90E2;
+        }
+
+        .item-details {
+            margin-bottom: 20px;
+        }
+
+        .item-details strong {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+
+        img {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        a {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 10px 5px 0 0;
+            background-color: #4A90E2;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        a:hover {
+            background-color: #357ABD;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+
+            .item-details strong {
+                width: 120px;
+            }
+
+            img {
+                max-width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Item Details</h1>
+        <div class="item-details">
+            <strong>Name:</strong> {{ item.name }}
+        </div>
+        <div class="item-details">
+            <strong>Description:</strong> {{ item.description }}
+        </div>
+        <div class="item-details">
+            <strong>Barcode:</strong> {{ item.barcode }}
+        </div>
+        <div class="item-details">
+            <strong>QR Code:</strong> <br>
+            <img src="{{ item.qr_code.url }}" alt="QR Code">
+        </div>
+        <div class="item-details">
+            <strong>Barcode Image:</strong> <br>
+            {% if item.barcode_image %}
+                <img src="{{ item.barcode_image.url }}" alt="Barcode Image">
+            {% else %}
+                <p>No barcode available</p>
+            {% endif %}
+        </div>
+        <a href="{% url 'item_edit' item.pk %}">Edit Item</a>
+        <a href="{% url 'item_list' %}">Back to List</a>
+    </div>
+</body>
+</html>

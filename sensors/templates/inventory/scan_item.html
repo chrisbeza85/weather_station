@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Item</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #4A90E2;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4A90E2;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #357ABD;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #4A90E2;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        function autoSubmit() {
+            const barcodeInput = document.getElementById("barcodeInput");
+            barcodeInput.addEventListener("input", function() {
+                if (barcodeInput.value.length > 0) {
+                    document.getElementById("scanForm").submit();
+                }
+            });
+        }
+    </script>
+</head>
+<body onload="autoSubmit()">
+    <div class="container">
+        <h1>Scan Item</h1>
+        <form id="scanForm" method="POST">
+            {% csrf_token %}
+            <input type="text" id="barcodeInput" name="barcode" placeholder="Scan or enter barcode" required autofocus>
+        </form>
+        <a href="{% url 'item_list' %}" class="back-link">Back to List</a>
+    </div>
+</body>
+</html>

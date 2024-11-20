@@ -20,7 +20,7 @@ android {
 
     defaultConfig {               
         applicationId = "com.chris.weather_app"
-        minSdk = 19  // Replace with a fixed minimum SDK version
+        minSdk = 21  // Replace with a fixed minimum SDK version
         targetSdk = 33  // Replace with a fixed target SDK version
         versionCode = 1
         versionName = "1.0"
